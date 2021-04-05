@@ -109,9 +109,9 @@ def on_new_client(clientsocket,addr):
             print ('Received a message from client', json_msg["srcid"], \
                                             "payload", json_msg["payload"])
             policy = json_msg["privPoliId"]
-            print(policy)
+            # print(policy)
             target_host_id = round_robin(policy_table[policy])
-            print(target_host_id)
+            # print(target_host_id)
             server_name = 'localhost'
             server_port = updated_available_server_table\
                                 [updated_available_server_table["id"]==target_host_id]["listenport"]
@@ -126,6 +126,7 @@ def on_new_client(clientsocket,addr):
             recv_json_msg = json.loads(recv_msg.decode())
             print ("Received a data message from server id", recv_json_msg["srcid"],\
                                                  "payload", recv_json_msg["payload"])
+            print("")
             server_socket.close()
 
             clientsocket.send(json.dumps(recv_json_msg).encode())
