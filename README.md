@@ -47,8 +47,8 @@ N.B. Please note that, you can change any of the argument values (id/pp/listen/r
 ![Client](./screenshots/client.png)
 
 
-## Video Illustration
-![VideoIllustration](./screenshots/reverse_proxy.mp4)
+## Video Illustration (GIF)
+![VideoIllustration](./screenshots/reverse_proxy.gif)
 
 
 ## Future Work
