@@ -47,7 +47,8 @@ def read_json(filename):
 
 if __name__ == "__main__":
     option_check()
-    server_name = 'localhost'
+    server_name = 'reverseproxy.ddns.net'
+    # server_name = 'ec2-3-21-114-31.us-east-2.compute.amazonaws.com'
     server_port = int(args[1])
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_name,server_port))
