@@ -51,6 +51,17 @@ N.B. Please note that, you can change any of the argument values (id/pp/listen/r
 ![VideoIllustration](./screenshots/reverse_proxy.gif)
 
 
+## AWS Adoption
+The reverse proxy is also implemented in AWS EC2 instance. The working procedure will
+be published in a blog post (I will include the link later). Using one EC2 instance
+for reverse proxy and other two as a general server, you can take a look at the 
+following visualizations
+
+![image](./AWS-EC2-Adoption/screenshots/aws-EC2-reverse-proxy-demo.png)
+![VideoIllustration](./AWS-EC2-Adoption/screenshots/aws-EC2-reverse-proxy-demo.gif)
+
+
+
 ## Future Work
 1. Full Documentation
 2. Improve Automation
