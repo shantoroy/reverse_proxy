@@ -1,10 +1,6 @@
 # The Reverse Proxy
 # Supports Python v3.*
 
-# help sources:
-# https://medium.com/customorchestrator/simple-reverse-proxy-server-using-flask-936087ce0afb
-# https://github.com/MollardMichael/python-reverse-proxy/blob/master/proxy.py
-
 
 # Import required modules
 import socket
@@ -54,7 +50,7 @@ def round_robin(iterable):
     return next(iterable)
 
 # define the available table
-column_names = ["type", "id", "privPolyId", "listenport"]
+column_names = ["type", "id", "privPolyId", "listenport", "ip_addr"]
 updated_available_server_table = pd.DataFrame(columns = column_names)
 
 # define the packet switch table
@@ -75,11 +71,6 @@ def available_server(msg):
         policy_table[policy] = itertools.cycle(set(updated_available_server_table\
                 [updated_available_server_table["privPolyId"]==policy]["id"].tolist()))
 
-    # print(policy_table)
-    # for policy in policy_list:
-    #     globals()['policy%s' % policy] = \
-    #         updated_available_server_table[updated_available_server_table["privPolyId"]==policy]
-
 
     
 # Establish connection with new client
@@ -95,14 +86,12 @@ def on_new_client(clientsocket,addr):
         json_msg = json.loads(msg.decode())
 
         if json_msg["type"] == "1":
+            ip, port = clientsocket.getpeername()
+            print ("Received Connection from IP:", ip, "Port:", port)
+            json_msg["ip_addr"] = ip
             print ("Received setup message from server id", json_msg["id"], "privacy policy",\
                                 json_msg["privPolyId"], "port", json_msg["listenport"])
             available_server(json_msg)
-
-        # elif json_msg["type"] == "2":
-        #     print ("Received a data message from server id", json_msg["srcid"],\
-        #                                          "payload", json_msg["payload"])
-        #     target_client_id = json_msg["destid"]
 
 
         elif json_msg["type"] == "0":
@@ -112,15 +101,16 @@ def on_new_client(clientsocket,addr):
             # print(policy)
             target_host_id = round_robin(policy_table[policy])
             # print(target_host_id)
-            server_name = 'localhost'
-            server_port = updated_available_server_table\
-                                [updated_available_server_table["id"]==target_host_id]["listenport"]
+            server_name = updated_available_server_table.loc\
+                            [updated_available_server_table["id"]==target_host_id, "ip_addr"].values[0]
+            server_port = int(updated_available_server_table.loc\
+                            [updated_available_server_table["id"]==target_host_id, "listenport"].values[0])
 
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server_socket.connect((server_name,server_port))
 
-            print("Forwarding a data message to server id", target_host_id, \
-                                                "payload", json_msg["payload"])
+            print("Forwarding a data message to server id", target_host_id, "server ip", server_name, \
+                                                "port", server_port, "payload", json_msg["payload"])
             server_socket.send(json.dumps(json_msg).encode())
             recv_msg = server_socket.recv(2048)
             recv_json_msg = json.loads(recv_msg.decode())
@@ -147,7 +137,8 @@ def on_new_client(clientsocket,addr):
 if __name__ == "__main__":
     args = option_check()
     s = socket.socket()         # Create a socket object
-    host = socket.gethostname() # Get local machine name
+    # host = socket.gethostname() # Get local machine name
+    host = 'localhost'
     port = int(args[0])              # Reserve a port for your service.
     print("Running the reverse proxy on port", port)
 

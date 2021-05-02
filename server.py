@@ -69,7 +69,8 @@ def on_new_client(clientsocket,addr):
 def connect_reverse_proxy():
     new_json_msg = {"type":"1", "id": str(args[0]), "privPolyId": str(args[1]),\
                         "listenport": str(args[2])}
-    rev_proxy_name = 'localhost'
+    # rev_proxy_name = 'reverseproxy.ddns.net'
+    rev_proxy_name = '127.0.0.1'
     rev_proxy_port = int(args[3])
 
     rev_proxy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,7 +88,7 @@ def connect_reverse_proxy():
 if __name__ == "__main__":
     option_check()
     s = socket.socket()         # Create a socket object
-    host = socket.gethostname() # Get local machine name
+    host = '127.0.0.1' # Get local machine name
     port = int(args[2])              # Reserve a port for your service.
 
 
