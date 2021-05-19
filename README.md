@@ -1,11 +1,5 @@
 # Simple Reverse Proxy Load-balancing in Python
 
-## Basic Information
-* Name - Shanto Roy
-* PSID - 1894941
-* Course - Computer Networks
-* Assignment - Reverse Proxy with Loadbalancing (Round Robin)
-
 ## About
 The Reverse Proxy keeps track of available servers, receives client data, forwards client data to servers
 with corresponding privacy policy based on Round-Robin loadbalancing, receives processed data from servers, and returns the processed data to the clients. Each process is maintained using thread. The socket programming is done using python (version 3.x).
